@@ -20,11 +20,10 @@ public class Crawler {
     public static void main(String[] args) {
         WebGetter getter = new WebGetter();
         String web = "";
-        int pageSize = 15;
         int pageNo = 1;
-        while (pageNo <= pageSize) {
+        while (true) {
             try {
-                web = getter.getWeb("https://www.lagou.com/jobs/positionAjax.json?gj=3%E5%B9%B4%E5%8F%8A%E4%BB%A5%E4%B8%8B&px=default&city=%E6%B7%B1%E5%9C%B3&needAddtionalResult=false", "first=false&pn=" + pageNo + "&kd=Java");
+                web = getter.getWeb("https://www.lagou.com/jobs/positionAjax.json?px=new&needAddtionalResult=false", "first=false&pn=" + pageNo + "&kd=Java");
             } catch (IOException e) {
                 System.out.println("net is not available");
                 e.printStackTrace();
@@ -39,8 +38,12 @@ public class Crawler {
             } catch (InterruptedException e) {
 //                e.printStackTrace();
             }
-            JDBC.insert(list);
-            pageNo++;
+            if(list.size() > 0) {
+                JDBC.insert(list);
+                pageNo++;
+            }else{
+                break;
+            }
         }
     }
 
